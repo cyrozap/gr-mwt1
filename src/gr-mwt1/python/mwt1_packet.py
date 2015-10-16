@@ -110,7 +110,7 @@ class mwt1_packet_mod_base(gr.hier_block2):
 			self,
 			"mwt1_packet_mod_base",
 			gr.io_signature(0, 0, 0), # Input signature
-			gr.io_signature(1, 1, packet_source._hb.output_signature().sizeof_stream_item(0)) # Output signature
+			gr.io_signature(1, 1, gr.sizeof_char) # Output signature
 		)
 		self.connect(packet_source, self)
 		#start thread
