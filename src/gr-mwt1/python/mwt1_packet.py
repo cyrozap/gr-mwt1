@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# 
+#
 # Copyright 2014 funoverip.net.
-# 
+#
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3, or (at your option)
 # any later version.
-# 
+#
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-# 
+#
 
 
 # This code is mainly a copy/paste of blks2/packet.py
@@ -53,7 +53,7 @@ class _mwt1_packet_encoder_thread(_threading.Thread):
 			msg = self._msgq.delete_head() #blocking read of message queue
 			sample = msg.to_string() #get the body of the msg as a string
 			self._send(sample)
-		
+
 
 
 class mwt1_packet_encoder(gr.hier_block2):
@@ -63,19 +63,19 @@ class mwt1_packet_encoder(gr.hier_block2):
 	def __init__(self, samples_per_symbol, bits_per_symbol, preamble='', access_code='', pad_for_usrp=True, do_whitening=False, add_crc=False):
 		"""
 		packet_mod constructor.
-        
+
 		Args:
 			samples_per_symbol: number of samples per symbol
 			bits_per_symbol: number of bits per symbol
 			access_code: AKA sync vector
 			pad_for_usrp: If true, packets are padded such that they end up a multiple of 128 samples
 			do_whitening: apply CC111x whitening
-			add_crc: add CRC16 
+			add_crc: add CRC16
 		"""
 
 		#setup parameters
 		self._samples_per_symbol = samples_per_symbol
- 		self._bits_per_symbol = bits_per_symbol
+		self._bits_per_symbol = bits_per_symbol
 		self._pad_for_usrp = pad_for_usrp
 		if not preamble: #get preamble
 			preamble = mwt1_packet_utils.default_preamble
@@ -141,4 +141,3 @@ class mwt1_packet_mod_base(gr.hier_block2):
 		self.connect(packet_source, self)
 		#start thread
 		_mwt1_packet_encoder_thread(source_queue, packet_source.send_pkt)
-

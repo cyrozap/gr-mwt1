@@ -1,17 +1,17 @@
 /* -*- c++ -*- */
-/* 
+/*
  * Copyright 2014 <+YOU OR YOUR COMPANY+>.
- * 
+ *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this software; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
@@ -92,7 +92,7 @@ namespace gr {
                 if(is_msg){
                         // add new bit
                         buffer_append(in[i]);
-                        // end of message ? 
+                        // end of message ?
                         if ((buffer_i != 0 && bit_index == 8 && buffer_i == buffer_expected_len - 1) ||
                                 buffer_i == (BUF_MAX_SIZE)-1){
                                 is_msg = false; // stop
@@ -102,7 +102,7 @@ namespace gr {
                 }else{
                         // did we find the beginning of a new message ?
                         if(in[i] & 0x02){
-                                // reset buffer 
+                                // reset buffer
                                 buffer_reset();
                                 // add the first bit
                                 buffer_append(in[i]);
@@ -148,7 +148,7 @@ namespace gr {
 
 	// CHECKSUM ?
 	if(do_crc16_check){
-		
+
                 // get CRC from frame (2 last bytes)
                 checksum_found = buffer[buffer_i-1];
                 checksum_found <<= 8;
@@ -193,7 +193,7 @@ namespace gr {
 	        target_queue->insert_tail(msg);       // send it
 	        msg.reset();                          // free it up
 	}
-	
+
 
 
 	return 1;
@@ -283,7 +283,7 @@ namespace gr {
 
     int mwt1_packet_decoder_impl::pn9_init_table(){
 
-	// 511 Bytes XOR’d with Data during a Whitening Operation 
+	// 511 Bytes XOR’d with Data during a Whitening Operation
 	unsigned char tmp[] = {
 		0xff, 0xe1, 0x1d, 0x9a, 0xed, 0x85, 0x33, 0x24, 0xea, 0x7a, 0xd2, 0x39, 0x70, 0x97, 0x57, 0x0a,
 		0x54, 0x7d, 0x2d, 0xd8, 0x6d, 0x0d, 0xba, 0x8f, 0x67, 0x59, 0xc7, 0xa2, 0xbf, 0x34, 0xca, 0x18,
@@ -327,4 +327,3 @@ namespace gr {
 
   } /* namespace mwt1 */
 } /* namespace gr */
-

@@ -1,17 +1,17 @@
 /* -*- c++ -*- */
-/* 
+/*
  * Copyright 2014 <+YOU OR YOUR COMPANY+>.
- * 
+ *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this software; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
@@ -24,7 +24,7 @@
 #include <mwt1/mwt1_packet_decoder.h>
 //#include <time.h>
 #include <cstdio>
-	
+
 #define BUF_MAX_SIZE		2048    // bytes
 #define PN9_TABLE_SIZE		511
 
@@ -54,8 +54,8 @@ namespace gr {
         struct timeval time_init;
         struct timeval time_sync_found;
 
-	// 99.9% inspired from https://github.com/matthijskooijman/arduino-max/blob/master/Pn9.cpp 
-	unsigned char pn9_table[PN9_TABLE_SIZE]; 
+	// 99.9% inspired from https://github.com/matthijskooijman/arduino-max/blob/master/Pn9.cpp
+	unsigned char pn9_table[PN9_TABLE_SIZE];
 
      public:
       mwt1_packet_decoder_impl(msg_queue::sptr target_queue, bool do_unwhitening, bool do_crc16_check, bool verbose, bool drop_header);
@@ -87,4 +87,3 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_MWT1_MWT1_PACKET_DECODER_IMPL_H */
-

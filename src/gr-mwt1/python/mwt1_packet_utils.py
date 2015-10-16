@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# 
+#
 # Copyright 2014 funoverip.net.
-# 
+#
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3, or (at your option)
 # any later version.
-# 
+#
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-# 
+#
 
 
 
@@ -45,7 +45,7 @@ def whiten(data):
 	if length > PN9_MAX_ENTRIES:
 		print "WARNING: WHITENING table not long enough!. Data will be corrupted"
 	for i in range(length):
-		data_new += chr(ord(data[i]) ^ pn9_table[i]) 
+		data_new += chr(ord(data[i]) ^ pn9_table[i])
 	return data_new
 
 
@@ -55,7 +55,7 @@ def dewhiten(data):
 def crc16(data):
 	checksum = CRC16_INIT
 	for c in data:
-		checksum = crc16_2(ord(c), checksum); 
+		checksum = crc16_2(ord(c), checksum);
 	return struct.pack('!H',checksum)
 
 def crc16_2(crcData,crcReg):
@@ -98,7 +98,7 @@ def make_packet(payload, samples_per_symbol, bits_per_symbol,
 		pad_for_usrp:
 		do_whitening: ccxxxx whitening version
 		add_crc: add CRC16 (2 bytes) checksum
-		
+
 	Packet will have access code at the beginning, followed by length (1 byte), payload
 	and finally CRC-16.
 	"""
@@ -138,6 +138,5 @@ def make_packet(payload, samples_per_symbol, bits_per_symbol,
 	if pad_for_usrp:
         	usrp_packing = packet_utils._npadding_bytes(len(pkt), samples_per_symbol, bits_per_symbol) * '\x55'
         	pkt = pkt + usrp_packing
-	
-	return pkt
 
+	return pkt
