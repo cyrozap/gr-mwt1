@@ -51,7 +51,7 @@ from mwt1_swig import *
 from mwt1_packet import mwt1_packet_encoder, \
     mwt1_packet_mod_base
 
-from mwt1_packet_utils import whiten, dewhiten, make_header, make_packet
+from mwt1_packet_utils import crc8, bits_to_bytes, make_packet
 #from crc import *
 
 # ----------------------------------------------------------------
