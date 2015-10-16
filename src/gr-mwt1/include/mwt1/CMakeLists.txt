@@ -22,5 +22,5 @@
 ########################################################################
 install(FILES
     api.h
-    cc1111_packet_decoder.h DESTINATION include/cc1111
+    mwt1_packet_decoder.h DESTINATION include/mwt1
 )

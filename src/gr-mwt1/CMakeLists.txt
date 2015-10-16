@@ -22,7 +22,7 @@
 # Project setup
 ########################################################################
 cmake_minimum_required(VERSION 2.6)
-project(gr-cc1111 CXX C)
+project(gr-mwt1 CXX C)
 enable_testing()
 
 #select the release build type by default to get optimization flags
@@ -60,7 +60,7 @@ set(Boost_ADDITIONAL_VERSIONS
 find_package(Boost "1.35" COMPONENTS filesystem system)
 
 if(NOT Boost_FOUND)
-    message(FATAL_ERROR "Boost required to compile cc1111")
+    message(FATAL_ERROR "Boost required to compile mwt1")
 endif()
 
 ########################################################################
@@ -69,7 +69,7 @@ endif()
 include(GrPlatform) #define LIB_SUFFIX
 set(GR_RUNTIME_DIR      bin)
 set(GR_LIBRARY_DIR      lib${LIB_SUFFIX})
-set(GR_INCLUDE_DIR      include/cc1111)
+set(GR_INCLUDE_DIR      include/mwt1)
 set(GR_DATA_DIR         share)
 set(GR_PKG_DATA_DIR     ${GR_DATA_DIR}/${CMAKE_PROJECT_NAME})
 set(GR_DOC_DIR          ${GR_DATA_DIR}/doc)
@@ -93,7 +93,7 @@ set(GR_REQUIRED_COMPONENTS RUNTIME)
 find_package(Gnuradio "3.7.2" REQUIRED)
 
 if(NOT CPPUNIT_FOUND)
-    message(FATAL_ERROR "CppUnit required to compile cc1111")
+    message(FATAL_ERROR "CppUnit required to compile mwt1")
 endif()
 
 ########################################################################
@@ -116,8 +116,8 @@ link_directories(
 )
 
 # Set component parameters
-set(GR_CC1111_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "" FORCE)
-set(GR_CC1111_SWIG_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/swig CACHE INTERNAL "" FORCE)
+set(GR_MWT1_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "" FORCE)
+set(GR_MWT1_SWIG_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/swig CACHE INTERNAL "" FORCE)
 
 ########################################################################
 # Create uninstall target
@@ -134,7 +134,7 @@ add_custom_target(uninstall
 ########################################################################
 # Add subdirectories
 ########################################################################
-add_subdirectory(include/cc1111)
+add_subdirectory(include/mwt1)
 add_subdirectory(lib)
 add_subdirectory(swig)
 add_subdirectory(python)
@@ -145,6 +145,6 @@ add_subdirectory(docs)
 ########################################################################
 # Install cmake search helper for this library
 ########################################################################
-install(FILES cmake/Modules/cc1111Config.cmake        
-    DESTINATION lib/cmake/cc1111
+install(FILES cmake/Modules/mwt1Config.cmake        
+    DESTINATION lib/cmake/mwt1
 )

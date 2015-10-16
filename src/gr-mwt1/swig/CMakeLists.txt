@@ -35,23 +35,23 @@ foreach(incdir ${GNURADIO_RUNTIME_INCLUDE_DIRS})
     list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/gnuradio/swig)
 endforeach(incdir)
 
-set(GR_SWIG_LIBRARIES gnuradio-cc1111)
-set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/cc1111_swig_doc.i)
+set(GR_SWIG_LIBRARIES gnuradio-mwt1)
+set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/mwt1_swig_doc.i)
 set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
-GR_SWIG_MAKE(cc1111_swig cc1111_swig.i)
+GR_SWIG_MAKE(mwt1_swig mwt1_swig.i)
 
 ########################################################################
 # Install the build swig module
 ########################################################################
-GR_SWIG_INSTALL(TARGETS cc1111_swig DESTINATION ${GR_PYTHON_DIR}/cc1111)
+GR_SWIG_INSTALL(TARGETS mwt1_swig DESTINATION ${GR_PYTHON_DIR}/mwt1)
 
 ########################################################################
 # Install swig .i files for development
 ########################################################################
 install(
     FILES
-    cc1111_swig.i
-    ${CMAKE_CURRENT_BINARY_DIR}/cc1111_swig_doc.i
-    DESTINATION ${GR_INCLUDE_DIR}/cc1111/swig
+    mwt1_swig.i
+    ${CMAKE_CURRENT_BINARY_DIR}/mwt1_swig_doc.i
+    DESTINATION ${GR_INCLUDE_DIR}/mwt1/swig
 )

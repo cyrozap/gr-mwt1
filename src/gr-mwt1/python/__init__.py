@@ -19,7 +19,7 @@
 # The presence of this file turns this directory into a Python package
 
 '''
-This is the GNU Radio CC1111 module. Place your Python package
+This is the GNU Radio MWT1 module. Place your Python package
 description here (python/__init__.py).
 '''
 
@@ -41,17 +41,17 @@ if _RTLD_GLOBAL != 0:
 # ----------------------------------------------------------------
 
 
-# import swig generated symbols into the cc1111 namespace
-from cc1111_swig import *
+# import swig generated symbols into the mwt1 namespace
+from mwt1_swig import *
 
 # import any pure python here
-#from cc1111_packet import cc1111_packet
-#from cc1111_packet_utils import cc1111_packet_utils
+#from mwt1_packet import mwt1_packet
+#from mwt1_packet_utils import mwt1_packet_utils
 #
-from cc1111_packet import cc1111_packet_encoder, \
-    cc1111_packet_mod_base
+from mwt1_packet import mwt1_packet_encoder, \
+    mwt1_packet_mod_base
 
-from cc1111_packet_utils import whiten, dewhiten, make_header, make_packet
+from mwt1_packet_utils import whiten, dewhiten, make_header, make_packet
 #from crc import *
 
 # ----------------------------------------------------------------

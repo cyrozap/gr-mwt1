@@ -24,17 +24,17 @@ include(GrPlatform) #define LIB_SUFFIX
 
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
-list(APPEND cc1111_sources
-    cc1111_packet_decoder_impl.cc )
+list(APPEND mwt1_sources
+    mwt1_packet_decoder_impl.cc )
 
-add_library(gnuradio-cc1111 SHARED ${cc1111_sources})
-target_link_libraries(gnuradio-cc1111 ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
-set_target_properties(gnuradio-cc1111 PROPERTIES DEFINE_SYMBOL "gnuradio_cc1111_EXPORTS")
+add_library(gnuradio-mwt1 SHARED ${mwt1_sources})
+target_link_libraries(gnuradio-mwt1 ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
+set_target_properties(gnuradio-mwt1 PROPERTIES DEFINE_SYMBOL "gnuradio_mwt1_EXPORTS")
 
 ########################################################################
 # Install built library files
 ########################################################################
-install(TARGETS gnuradio-cc1111
+install(TARGETS gnuradio-mwt1
     LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
     ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
     RUNTIME DESTINATION bin              # .dll file
@@ -46,19 +46,19 @@ install(TARGETS gnuradio-cc1111
 #include(GrTest)
 
 #include_directories(${CPPUNIT_INCLUDE_DIRS})
-#list(APPEND test_cc1111_sources
-#    ${CMAKE_CURRENT_SOURCE_DIR}/test_cc1111.cc
-#    ${CMAKE_CURRENT_SOURCE_DIR}/qa_cc1111.cc
+#list(APPEND test_mwt1_sources
+#    ${CMAKE_CURRENT_SOURCE_DIR}/test_mwt1.cc
+#    ${CMAKE_CURRENT_SOURCE_DIR}/qa_mwt1.cc
 #    ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_CURRENT_SOURCE_DIR}/)
 
-#add_executable(test-cc1111 ${test_cc1111_sources})
+#add_executable(test-mwt1 ${test_mwt1_sources})
 
 #target_link_libraries(
-#  test-cc1111
+#  test-mwt1
 #  ${GNURADIO_RUNTIME_LIBRARIES}
 #  ${Boost_LIBRARIES}
 #  ${CPPUNIT_LIBRARIES}
-#  gnuradio-cc1111
+#  gnuradio-mwt1
 #)
 
-#GR_ADD_TEST(test_cc1111 test-cc1111)
+#GR_ADD_TEST(test_mwt1 test-mwt1)

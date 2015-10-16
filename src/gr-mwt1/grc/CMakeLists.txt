@@ -18,6 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    cc1111_cc1111_packet_encoder.xml
-    cc1111_cc1111_packet_decoder.xml DESTINATION share/gnuradio/grc/blocks
+    mwt1_mwt1_packet_encoder.xml
+    mwt1_mwt1_packet_decoder.xml DESTINATION share/gnuradio/grc/blocks
 )

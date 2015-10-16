@@ -23,23 +23,23 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "cc1111_packet_decoder_impl.h"
+#include "mwt1_packet_decoder_impl.h"
 
 namespace gr {
-  namespace cc1111 {
+  namespace mwt1 {
 
-    cc1111_packet_decoder::sptr
-    cc1111_packet_decoder::make(msg_queue::sptr target_queue, bool do_unwhitening, bool do_crc16_check, bool verbose, bool drop_header)
+    mwt1_packet_decoder::sptr
+    mwt1_packet_decoder::make(msg_queue::sptr target_queue, bool do_unwhitening, bool do_crc16_check, bool verbose, bool drop_header)
     {
       return gnuradio::get_initial_sptr
-        (new cc1111_packet_decoder_impl(target_queue, do_unwhitening, do_crc16_check, verbose, drop_header));
+        (new mwt1_packet_decoder_impl(target_queue, do_unwhitening, do_crc16_check, verbose, drop_header));
     }
 
     /*
      * The private constructor
      */
-    cc1111_packet_decoder_impl::cc1111_packet_decoder_impl(msg_queue::sptr arg_target_queue, bool arg_do_unwhitening, bool arg_do_crc16_check, bool arg_verbose, bool arg_drop_header)
-      : gr::block("cc1111_packet_decoder",
+    mwt1_packet_decoder_impl::mwt1_packet_decoder_impl(msg_queue::sptr arg_target_queue, bool arg_do_unwhitening, bool arg_do_crc16_check, bool arg_verbose, bool arg_drop_header)
+      : gr::block("mwt1_packet_decoder",
               gr::io_signature::make(1, 1, sizeof(unsigned char)),
               gr::io_signature::make(1, 1, sizeof(unsigned char))),
 
@@ -63,19 +63,19 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    cc1111_packet_decoder_impl::~cc1111_packet_decoder_impl()
+    mwt1_packet_decoder_impl::~mwt1_packet_decoder_impl()
     {
     }
 
     void
-    cc1111_packet_decoder_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
+    mwt1_packet_decoder_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
         /* <+forecast+> e.g. ninput_items_required[0] = noutput_items */
 	ninput_items_required[0] = noutput_items;
     }
 
     int
-    cc1111_packet_decoder_impl::general_work (int noutput_items,
+    mwt1_packet_decoder_impl::general_work (int noutput_items,
                        gr_vector_int &ninput_items,
                        gr_vector_const_void_star &input_items,
                        gr_vector_void_star &output_items)
@@ -126,7 +126,7 @@ namespace gr {
     BUFFER FLUSH
     ****************************************************************/
     // print/send out current buffer
-    int cc1111_packet_decoder_impl::buffer_flush(unsigned char* out){
+    int mwt1_packet_decoder_impl::buffer_flush(unsigned char* out){
 
         //char timestamp_buf[64];
 	uint16_t checksum = CRC_INIT;
@@ -204,7 +204,7 @@ namespace gr {
     BUFFER APPEND
     ****************************************************************/
     // we receive a byte and add the first bit to the end of the buffer
-    int cc1111_packet_decoder_impl::buffer_append(unsigned char byte){
+    int mwt1_packet_decoder_impl::buffer_append(unsigned char byte){
 
         // need a new byte in buffer[] ?
         if(bit_index == 8){
@@ -244,7 +244,7 @@ namespace gr {
     /****************************************************************
     BUFFER RESET
     ****************************************************************/
-    int cc1111_packet_decoder_impl::buffer_reset(){
+    int mwt1_packet_decoder_impl::buffer_reset(){
 	memset(buffer,0,BUF_MAX_SIZE);
         bit_index=0;
         buffer_i=0;
@@ -255,7 +255,7 @@ namespace gr {
    /****************************************************************
    CRC16
    ****************************************************************/
-    uint16_t cc1111_packet_decoder_impl::culCalcCRC(unsigned char crcData, uint16_t crcReg) {
+    uint16_t mwt1_packet_decoder_impl::culCalcCRC(unsigned char crcData, uint16_t crcReg) {
         unsigned int i;
         for (i = 0; i < 8; i++) {
                 if (((crcReg & 0x8000) >> 8) ^ (crcData & 0x80))
@@ -271,7 +271,7 @@ namespace gr {
     /****************************************************************
     WHITENING
     ****************************************************************/
-    int cc1111_packet_decoder_impl::pn9_xor(unsigned char *buf, int len) {
+    int mwt1_packet_decoder_impl::pn9_xor(unsigned char *buf, int len) {
         int max_len = (len > sizeof(pn9_table)) ? sizeof(pn9_table) -1 : len;
 	for (int i = 0; i < max_len; ++i)
     		buf[i] ^= pn9_table[i];
@@ -281,7 +281,7 @@ namespace gr {
 	  	return 0;
     }
 
-    int cc1111_packet_decoder_impl::pn9_init_table(){
+    int mwt1_packet_decoder_impl::pn9_init_table(){
 
 	// 511 Bytes XOR’d with Data during a Whitening Operation 
 	unsigned char tmp[] = {
@@ -325,6 +325,6 @@ namespace gr {
 
 
 
-  } /* namespace cc1111 */
+  } /* namespace mwt1 */
 } /* namespace gr */
 

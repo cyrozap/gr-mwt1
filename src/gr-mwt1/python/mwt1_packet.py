@@ -27,7 +27,7 @@ from binascii import hexlify
 from gnuradio import gr, digital
 from gnuradio import blocks
 from gnuradio.digital import packet_utils
-import cc1111_packet_utils
+import mwt1_packet_utils
 import gnuradio.gr.gr_threading as _threading
 
 
@@ -36,9 +36,9 @@ DEFAULT_MSGQ_LIMIT = 2
 
 
 ##################################################
-## CC1111 Packet Encoder
+## MWT1 Packet Encoder
 ##################################################
-class _cc1111_packet_encoder_thread(_threading.Thread):
+class _mwt1_packet_encoder_thread(_threading.Thread):
 
 	def __init__(self, msgq, send):
 		self._msgq = msgq
@@ -56,7 +56,7 @@ class _cc1111_packet_encoder_thread(_threading.Thread):
 		
 
 
-class cc1111_packet_encoder(gr.hier_block2):
+class mwt1_packet_encoder(gr.hier_block2):
 	"""
 	Hierarchical block for wrapping packet-based modulators.
 	"""
@@ -78,9 +78,9 @@ class cc1111_packet_encoder(gr.hier_block2):
  		self._bits_per_symbol = bits_per_symbol
 		self._pad_for_usrp = pad_for_usrp
 		if not preamble: #get preamble
-			preamble = cc1111_packet_utils.default_preamble
+			preamble = mwt1_packet_utils.default_preamble
 		if not access_code: #get access code
-			access_code = cc1111_packet_utils.default_access_code
+			access_code = mwt1_packet_utils.default_access_code
 		if not packet_utils.is_1_0_string(preamble):
 			raise ValueError, "Invalid preamble %r. Must be string of 1's and 0's" % (preamble,)
 		if not packet_utils.is_1_0_string(access_code):
@@ -97,7 +97,7 @@ class cc1111_packet_encoder(gr.hier_block2):
 		#initialize hier2
 		gr.hier_block2.__init__(
 			self,
-			"cc1111_packet_encoder",
+			"mwt1_packet_encoder",
 			gr.io_signature(0, 0, 0), # Input signature
 			gr.io_signature(1, 1, gr.sizeof_char) # Output signature
 		)
@@ -111,7 +111,7 @@ class cc1111_packet_encoder(gr.hier_block2):
 		Args:
 			payload: string, data to send
 		"""
-		packet = cc1111_packet_utils.make_packet(
+		packet = mwt1_packet_utils.make_packet(
 			payload,
 			self._samples_per_symbol,
 			self._bits_per_symbol,
@@ -125,7 +125,7 @@ class cc1111_packet_encoder(gr.hier_block2):
 		self._msgq_out.insert_tail(msg)
 
 
-class cc1111_packet_mod_base(gr.hier_block2):
+class mwt1_packet_mod_base(gr.hier_block2):
 	"""
 	Hierarchical block for wrapping packet source block.
 	"""
@@ -134,11 +134,11 @@ class cc1111_packet_mod_base(gr.hier_block2):
 		#initialize hier2
 		gr.hier_block2.__init__(
 			self,
-			"cc1111_packet_mod_base",
+			"mwt1_packet_mod_base",
 			gr.io_signature(0, 0, 0), # Input signature
 			gr.io_signature(1, 1, packet_source._hb.output_signature().sizeof_stream_item(0)) # Output signature
 		)
 		self.connect(packet_source, self)
 		#start thread
-		_cc1111_packet_encoder_thread(source_queue, packet_source.send_pkt)
+		_mwt1_packet_encoder_thread(source_queue, packet_source.send_pkt)
 

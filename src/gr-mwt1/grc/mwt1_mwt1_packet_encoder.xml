@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <block>
-  <name>Packet Encoder (CC1111) Source</name>
-  <key>cc1111_cc1111_packet_encoder</key>
-  <category>CC1111</category>
-  <import>import cc1111</import>
-        <make>cc1111.cc1111_packet_mod_base(cc1111.cc1111_packet_encoder(
+  <name>Packet Encoder (MWT1) Source</name>
+  <key>mwt1_mwt1_packet_encoder</key>
+  <category>MWT1</category>
+  <import>import mwt1</import>
+        <make>mwt1.mwt1_packet_mod_base(mwt1.mwt1_packet_encoder(
                 samples_per_symbol=$samples_per_symbol,
                 bits_per_symbol=$bits_per_symbol,
                 preamble=$preamble,
@@ -24,7 +24,7 @@
         <param>
                 <name>Samples/Symbol</name>
                 <key>samples_per_symbol</key>
-		
+
                 <type>int</type>
         </param>
         <param>

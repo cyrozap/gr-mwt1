@@ -31,8 +31,8 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    cc1111_packet.py
-    cc1111_packet_utils.py DESTINATION ${GR_PYTHON_DIR}/cc1111
+    mwt1_packet.py
+    mwt1_packet_utils.py DESTINATION ${GR_PYTHON_DIR}/mwt1
 )
 
 ########################################################################
@@ -40,6 +40,6 @@ GR_PYTHON_INSTALL(
 ########################################################################
 include(GrTest)
 
-set(GR_TEST_TARGET_DEPS gnuradio-cc1111)
+set(GR_TEST_TARGET_DEPS gnuradio-mwt1)
 set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
-GR_ADD_TEST(qa_cc1111_packet ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_cc1111_packet.py)
+GR_ADD_TEST(qa_mwt1_packet ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_mwt1_packet.py)

@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_CC1111_CC1111_PACKET_DECODER_IMPL_H
-#define INCLUDED_CC1111_CC1111_PACKET_DECODER_IMPL_H
+#ifndef INCLUDED_MWT1_MWT1_PACKET_DECODER_IMPL_H
+#define INCLUDED_MWT1_MWT1_PACKET_DECODER_IMPL_H
 
-#include <cc1111/cc1111_packet_decoder.h>
+#include <mwt1/mwt1_packet_decoder.h>
 //#include <time.h>
 #include <cstdio>
 	
@@ -34,9 +34,9 @@
 
 
 namespace gr {
-  namespace cc1111 {
+  namespace mwt1 {
 
-    class cc1111_packet_decoder_impl : public cc1111_packet_decoder
+    class mwt1_packet_decoder_impl : public mwt1_packet_decoder
     {
      private:
 	msg_queue::sptr target_queue;	   	// block arg.  where to send the packet when received
@@ -58,8 +58,8 @@ namespace gr {
 	unsigned char pn9_table[PN9_TABLE_SIZE]; 
 
      public:
-      cc1111_packet_decoder_impl(msg_queue::sptr target_queue, bool do_unwhitening, bool do_crc16_check, bool verbose, bool drop_header);
-      ~cc1111_packet_decoder_impl();
+      mwt1_packet_decoder_impl(msg_queue::sptr target_queue, bool do_unwhitening, bool do_crc16_check, bool verbose, bool drop_header);
+      ~mwt1_packet_decoder_impl();
 
       // Where all the action really happens
       void forecast (int noutput_items, gr_vector_int &ninput_items_required);
@@ -83,8 +83,8 @@ namespace gr {
 
     };
 
-  } // namespace cc1111
+  } // namespace mwt1
 } // namespace gr
 
-#endif /* INCLUDED_CC1111_CC1111_PACKET_DECODER_IMPL_H */
+#endif /* INCLUDED_MWT1_MWT1_PACKET_DECODER_IMPL_H */
 

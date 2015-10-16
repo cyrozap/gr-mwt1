@@ -21,9 +21,9 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-from cc1111_packet import cc1111_packet
+from mwt1_packet import mwt1_packet
 
-class qa_cc1111_packet (gr_unittest.TestCase):
+class qa_mwt1_packet (gr_unittest.TestCase):
 
     def setUp (self):
         self.tb = gr.top_block ()
@@ -38,4 +38,4 @@ class qa_cc1111_packet (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_cc1111_packet, "qa_cc1111_packet.xml")
+    gr_unittest.run(qa_mwt1_packet, "qa_mwt1_packet.xml")
