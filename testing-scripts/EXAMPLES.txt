@@ -4,7 +4,7 @@ No RF communications
 
 $ ./local_loop.py 
 Using Volk machine: sse4_2_32_orc
-cc1111_packet_decoder_impl::pn9_init_table(): TODOOOOOOOOOOO
+mwt1_packet_decoder_impl::pn9_init_table(): TODOOOOOOOOOOO
 Pushing message
    Send: Hello from local_loop (0)
 Polling message
@@ -31,7 +31,7 @@ Using Volk machine: sse4_2_32_orc
 gr-osmosdr v0.1.1-9-gc65d205d (0.1.2git) gnuradio v3.7.2.1-62-g6195ff3c
 built-in source types: file fcd rtl rtl_tcp uhd hackrf rfspace 
 Using HackRF One with firmware 2014.04.1 
-cc1111_packet_decoder_impl::pn9_init_table(): TODOOOOOOOOOOO
+mwt1_packet_decoder_impl::pn9_init_table(): TODOOOOOOOOOOO
 [hackrf rcv] : 'Hello from RFCat ... (1)'
 [hackrf rcv] : 'Hello from RFCat ... (2)'
 [hackrf rcv] : 'Hello from RFCat ... (4)'

@@ -5,7 +5,7 @@
     <key>options</key>
     <param>
       <key>id</key>
-      <value>grc_cc1111_hackrf_receiver</value>
+      <value>grc_mwt1_hackrf_receiver</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -13,7 +13,7 @@
     </param>
     <param>
       <key>title</key>
-      <value>grc_cc1111_hackrf_receiver</value>
+      <value>grc_mwt1_hackrf_receiver</value>
     </param>
     <param>
       <key>author</key>
@@ -1000,10 +1000,10 @@
     </param>
   </block>
   <block>
-    <key>cc1111_cc1111_packet_decoder</key>
+    <key>mwt1_mwt1_packet_decoder</key>
     <param>
       <key>id</key>
-      <value>cc1111_cc1111_packet_decoder_0</value>
+      <value>mwt1_mwt1_packet_decoder_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -1200,12 +1200,12 @@
   </connection>
   <connection>
     <source_block_id>digital_correlate_access_code_bb_0_0</source_block_id>
-    <sink_block_id>cc1111_cc1111_packet_decoder_0</sink_block_id>
+    <sink_block_id>mwt1_mwt1_packet_decoder_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>cc1111_cc1111_packet_decoder_0</source_block_id>
+    <source_block_id>mwt1_mwt1_packet_decoder_0</source_block_id>
     <sink_block_id>blocks_null_sink_0_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>

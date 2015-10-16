@@ -5,7 +5,7 @@
     <key>options</key>
     <param>
       <key>id</key>
-      <value>grc_cc1111_hackrf_sender</value>
+      <value>grc_mwt1_hackrf_sender</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -13,7 +13,7 @@
     </param>
     <param>
       <key>title</key>
-      <value>grc_cc1111_hackrf_sender</value>
+      <value>grc_mwt1_hackrf_sender</value>
     </param>
     <param>
       <key>author</key>
@@ -281,10 +281,10 @@
     </param>
   </block>
   <block>
-    <key>cc1111_cc1111_packet_encoder</key>
+    <key>mwt1_mwt1_packet_encoder</key>
     <param>
       <key>id</key>
-      <value>cc1111_cc1111_packet_encoder_0</value>
+      <value>mwt1_mwt1_packet_encoder_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -588,7 +588,7 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>cc1111_cc1111_packet_encoder_0</source_block_id>
+    <source_block_id>mwt1_mwt1_packet_encoder_0</source_block_id>
     <sink_block_id>digital_gmsk_mod_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>

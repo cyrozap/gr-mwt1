@@ -4,7 +4,7 @@ import signal
 import sys
 from time import sleep
 from gnuradio import gr
-import grc_cc1111_hackrf_sender
+import grc_mwt1_hackrf_sender
 from binascii import hexlify, unhexlify
 
 # rf object
@@ -31,7 +31,7 @@ if __name__ == '__main__':
                         sys.exit(0)
 
 
-		rf = grc_cc1111_hackrf_sender.grc_cc1111_hackrf_sender()
+		rf = grc_mwt1_hackrf_sender.grc_mwt1_hackrf_sender()
 		rf.set_frequency(long(sys.argv[1]))
 		rf.start()
 

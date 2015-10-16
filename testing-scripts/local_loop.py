@@ -4,8 +4,8 @@ import signal
 import sys
 from time import sleep
 from gnuradio import gr
-import grc_cc1111_test_local_loop
-#import cc1111
+import grc_mwt1_test_local_loop
+#import mwt1
 from binascii import hexlify, unhexlify
 
 # rf object
@@ -15,7 +15,7 @@ rf = ''
 if __name__ == '__main__':
 
 	try:
-		rf = grc_cc1111_test_local_loop.grc_cc1111_test_local_loop()
+		rf = grc_mwt1_test_local_loop.grc_mwt1_test_local_loop()
 		rf.start()
 
 		i = 0

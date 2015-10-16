@@ -3,7 +3,7 @@
 import signal
 import sys
 from gnuradio import gr
-import grc_cc1111_hackrf_receiver
+import grc_mwt1_hackrf_receiver
 
 # rf object
 rf = ''
@@ -27,7 +27,7 @@ if __name__ == '__main__':
                         sys.exit(0)
 
 		freq = long(sys.argv[1])
-		rf = grc_cc1111_hackrf_receiver.grc_cc1111_hackrf_receiver()
+		rf = grc_mwt1_hackrf_receiver.grc_mwt1_hackrf_receiver()
 		rf.set_frequency_center(freq)
 		rf.start()
 

@@ -1,1 +1,0 @@
-../grc/grc_cc1111_test_local_loop.py

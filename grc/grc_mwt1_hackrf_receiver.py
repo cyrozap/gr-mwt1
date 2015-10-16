@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ##################################################
 # Gnuradio Python Flow Graph
-# Title: grc_cc1111_hackrf_receiver
+# Title: grc_mwt1_hackrf_receiver
 # Author: Jerome Nokin
 # Generated: Fri Jul 18 06:52:58 2014
 ##################################################
@@ -15,14 +15,14 @@ from gnuradio import gr
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from optparse import OptionParser
-import cc1111
+import mwt1
 import math
 import osmosdr
 
-class grc_cc1111_hackrf_receiver(gr.top_block):
+class grc_mwt1_hackrf_receiver(gr.top_block):
 
     def __init__(self):
-        gr.top_block.__init__(self, "grc_cc1111_hackrf_receiver")
+        gr.top_block.__init__(self, "grc_mwt1_hackrf_receiver")
 
         ##################################################
         # Variables
@@ -69,7 +69,7 @@ class grc_cc1111_hackrf_receiver(gr.top_block):
         self.digital_correlate_access_code_bb_0_0 = digital.correlate_access_code_bb(access_code, 1)
         self.digital_clock_recovery_mm_xx_0_0 = digital.clock_recovery_mm_ff(samp_per_sym*(1+0.0), 0.25*0.175*0.175, 0.5, 0.175, 0.005)
         self.digital_binary_slicer_fb_0_0_0 = digital.binary_slicer_fb()
-        self.cc1111_cc1111_packet_decoder_0 = cc1111.cc1111_packet_decoder(myqueue_out,True, True, False, True)
+        self.mwt1_mwt1_packet_decoder_0 = mwt1.mwt1_packet_decoder(myqueue_out,True, True, False, True)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate/2,True)
         self.blocks_null_sink_0_0 = blocks.null_sink(gr.sizeof_char*1)
         self.analog_quadrature_demod_cf_0_0 = analog.quadrature_demod_cf(2)
@@ -85,8 +85,8 @@ class grc_cc1111_hackrf_receiver(gr.top_block):
         self.connect((self.freq_xlating_fir_filter_xxx_0_0, 0), (self.rational_resampler_xxx_0_0, 0))
         self.connect((self.osmosdr_source_0, 0), (self.freq_xlating_fir_filter_xxx_1, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_1, 0), (self.blocks_throttle_0, 0))
-        self.connect((self.digital_correlate_access_code_bb_0_0, 0), (self.cc1111_cc1111_packet_decoder_0, 0))
-        self.connect((self.cc1111_cc1111_packet_decoder_0, 0), (self.blocks_null_sink_0_0, 0))
+        self.connect((self.digital_correlate_access_code_bb_0_0, 0), (self.mwt1_mwt1_packet_decoder_0, 0))
+        self.connect((self.mwt1_mwt1_packet_decoder_0, 0), (self.blocks_null_sink_0_0, 0))
 
 
 
@@ -193,6 +193,6 @@ class grc_cc1111_hackrf_receiver(gr.top_block):
 if __name__ == '__main__':
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
     (options, args) = parser.parse_args()
-    tb = grc_cc1111_hackrf_receiver()
+    tb = grc_mwt1_hackrf_receiver()
     tb.start()
     tb.wait()
