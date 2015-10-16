@@ -20,72 +20,84 @@
 #
 
 
-
-# This code is mainly a copy/paste of digital/packet_utils.py
-# header, whitening and CRC were adapted to CC11xx packet format
-
 import struct
 from gnuradio import gru
 from gnuradio.digital import packet_utils
 
-CRC16_POLY =  0x8005
-CRC16_INIT =  0xFFFF
-PN9_MAX_ENTRIES = 1024
 
-default_access_code = packet_utils.conv_packed_binary_string_to_1_0_string('\xAC\xDD\xA4\xE2\xF2\x8C\x20\xFC')
-default_preamble    = packet_utils.conv_packed_binary_string_to_1_0_string('\xA4\xF2')
-pn9_table	    = []
+ACCESS_CODE = packet_utils.conv_packed_binary_string_to_1_0_string('\xFF\x00' * 2)
+PREAMBLE	= packet_utils.conv_packed_binary_string_to_1_0_string('\xAA' * 16)
 
+ENCODER_TABLE = {
+	0x0: 0x15,
+	0x1: 0x31,
+	0x2: 0x32,
+	0x3: 0x23,
+	0x4: 0x34,
+	0x5: 0x25,
+	0x6: 0x26,
+	0x7: 0x16,
+	0x8: 0x1a,
+	0x9: 0x19,
+	0xa: 0x2a,
+	0xb: 0x0b,
+	0xc: 0x2c,
+	0xd: 0x0d,
+	0xe: 0x0e,
+	0xf: 0x1c,
+}
 
+# CRC8 lookup table and function adapted from here:
+# https://github.com/bewest/comlink2-uart/blob/master/lib.js
 
-def whiten(data):
-	global pn9_table
-	data_new = ''
-	length = len(data)
-	if length > PN9_MAX_ENTRIES:
-		print "WARNING: WHITENING table not long enough!. Data will be corrupted"
-	for i in range(length):
-		data_new += chr(ord(data[i]) ^ pn9_table[i])
-	return data_new
+CRC8_TABLE = [
+	0x00, 0x9b, 0xad, 0x36, 0xc1, 0x5a, 0x6c, 0xf7,
+	0x19, 0x82, 0xb4, 0x2f, 0xd8, 0x43, 0x75, 0xee,
+	0x32, 0xa9, 0x9f, 0x04, 0xf3, 0x68, 0x5e, 0xc5,
+	0x2b, 0xb0, 0x86, 0x1d, 0xea, 0x71, 0x47, 0xdc,
+	0x64, 0xff, 0xc9, 0x52, 0xa5, 0x3e, 0x08, 0x93,
+	0x7d, 0xe6, 0xd0, 0x4b, 0xbc, 0x27, 0x11, 0x8a,
+	0x56, 0xcd, 0xfb, 0x60, 0x97, 0x0c, 0x3a, 0xa1,
+	0x4f, 0xd4, 0xe2, 0x79, 0x8e, 0x15, 0x23, 0xb8,
+	0xc8, 0x53, 0x65, 0xfe, 0x09, 0x92, 0xa4, 0x3f,
+	0xd1, 0x4a, 0x7c, 0xe7, 0x10, 0x8b, 0xbd, 0x26,
+	0xfa, 0x61, 0x57, 0xcc, 0x3b, 0xa0, 0x96, 0x0d,
+	0xe3, 0x78, 0x4e, 0xd5, 0x22, 0xb9, 0x8f, 0x14,
+	0xac, 0x37, 0x01, 0x9a, 0x6d, 0xf6, 0xc0, 0x5b,
+	0xb5, 0x2e, 0x18, 0x83, 0x74, 0xef, 0xd9, 0x42,
+	0x9e, 0x05, 0x33, 0xa8, 0x5f, 0xc4, 0xf2, 0x69,
+	0x87, 0x1c, 0x2a, 0xb1, 0x46, 0xdd, 0xeb, 0x70,
+	0x0b, 0x90, 0xa6, 0x3d, 0xca, 0x51, 0x67, 0xfc,
+	0x12, 0x89, 0xbf, 0x24, 0xd3, 0x48, 0x7e, 0xe5,
+	0x39, 0xa2, 0x94, 0x0f, 0xf8, 0x63, 0x55, 0xce,
+	0x20, 0xbb, 0x8d, 0x16, 0xe1, 0x7a, 0x4c, 0xd7,
+	0x6f, 0xf4, 0xc2, 0x59, 0xae, 0x35, 0x03, 0x98,
+	0x76, 0xed, 0xdb, 0x40, 0xb7, 0x2c, 0x1a, 0x81,
+	0x5d, 0xc6, 0xf0, 0x6b, 0x9c, 0x07, 0x31, 0xaa,
+	0x44, 0xdf, 0xe9, 0x72, 0x85, 0x1e, 0x28, 0xb3,
+	0xc3, 0x58, 0x6e, 0xf5, 0x02, 0x99, 0xaf, 0x34,
+	0xda, 0x41, 0x77, 0xec, 0x1b, 0x80, 0xb6, 0x2d,
+	0xf1, 0x6a, 0x5c, 0xc7, 0x30, 0xab, 0x9d, 0x06,
+	0xe8, 0x73, 0x45, 0xde, 0x29, 0xb2, 0x84, 0x1f,
+	0xa7, 0x3c, 0x0a, 0x91, 0x66, 0xfd, 0xcb, 0x50,
+	0xbe, 0x25, 0x13, 0x88, 0x7f, 0xe4, 0xd2, 0x49,
+	0x95, 0x0e, 0x38, 0xa3, 0x54, 0xcf, 0xf9, 0x62,
+	0x8c, 0x17, 0x21, 0xba, 0x4d, 0xd6, 0xe0, 0x7b
+]
 
+def crc8(data):
+	result = 0
+	for i in range(0, len(data)):
+		result = lookup[(result ^ data[i])]
+	return result
 
-def dewhiten(data):
-	return whiten(data)        # self inverse
+def bits_to_bytes(bits):
+	encoded_bytes = bytearray(int(math.ceil(len(bits)/8.0)))
+	for i in range(0, len(bits)):
+		encoded_bytes[i / 8] ^= bits[i] << (7 - (i % 8))
+	return encoded_bytes
 
-def crc16(data):
-	checksum = CRC16_INIT
-	for c in data:
-		checksum = crc16_2(ord(c), checksum);
-	return struct.pack('!H',checksum)
-
-def crc16_2(crcData,crcReg):
-	for bit in range(0, 8):
-		if(((crcReg & 0x8000) >> 8) ^ (crcData & 0x80)):
-			crcReg = ((crcReg << 1) ^ CRC16_POLY ) & 0x0ffff ;
-		else:
-			crcReg = (crcReg << 1) & 0x0ffff;
-		crcData = (crcData << 1) & 0x0ff;
-	return crcReg
-
-
-# Gen Whitening table
-def pn9_gen(number):
-        state = 0x1ff
-        pn9_table = [0xff]
-        for count in range(number):
-                for i in range(8):
-                        state = (state >> 1) + (((state & 1) ^ (state >> 5) & 1) << 8)
-                pn9_table.append(state & 0xff)
-        return pn9_table
-pn9_table = pn9_gen(0x1ff)
-
-
-def make_header(payload_len):
-	return struct.pack('b', payload_len & 0x0ff)
-
-def make_packet(payload, samples_per_symbol, bits_per_symbol,
-		preamble, access_code,
-                pad_for_usrp=True, do_whitening=False, add_crc=False):
+def make_packet(payload, samples_per_symbol, bits_per_symbol, pad_for_usrp=True):
 	"""
 	Build a packet
 
@@ -93,50 +105,47 @@ def make_packet(payload, samples_per_symbol, bits_per_symbol,
 		payload: packet payload, len [0, 4096]
 		samples_per_symbol: samples per symbol (needed for padding calculation) (int)
 		bits_per_symbol: (needed for padding calculation) (int)
-		preamble: (eg: 10101010...)
-		access_code: the sync word
 		pad_for_usrp:
-		do_whitening: ccxxxx whitening version
-		add_crc: add CRC16 (2 bytes) checksum
 
-	Packet will have access code at the beginning, followed by length (1 byte), payload
-	and finally CRC-16.
+	Packet will have the preamble and access code at the beginning, followed by
+	the encoded payload and an 8-bit CRC.
 	"""
 
-	if not packet_utils.is_1_0_string(preamble):
-		raise ValueError, "preamble must be a string containing only 0's and 1's (%r)" % (preamble,)
+	(packed_access_code, padded) = packet_utils.conv_1_0_string_to_packed_binary_string(ACCESS_CODE)
+	(packed_preamble, ignore) = packet_utils.conv_1_0_string_to_packed_binary_string(PREAMBLE)
 
-	if not packet_utils.is_1_0_string(access_code):
-		raise ValueError, "access_code must be a string containing only 0's and 1's (%r)" % (access_code,)
+	# CRC
+	crc = crc8(payload)
+	raw_message = ''.join((payload, crc))
 
-	(packed_access_code, padded) = packet_utils.conv_1_0_string_to_packed_binary_string(access_code)
-	(packed_preamble, ignore) = packet_utils.conv_1_0_string_to_packed_binary_string(preamble)
+	# 4b/6b encoding
+	encoded_nibbles = []
+	for element in raw_message:
+		for shift in [4, 0]:
+			encoded_nibble = encode_table[(element >> shift) & 0xf]
+			encoded_nibbles.append(encoded_nibble)
 
-	# len
-	payload_length = len(payload)
-	# header (1 byte)
-	pkt_hd = make_header(payload_length)
-	# data
-	pkt_dt = payload
-	# final message
-	final_message = ''.join((pkt_hd, pkt_dt))
+	# Nibble to bit conversion
+	bits = []
+	for element in encoded_nibbles:
+		for bit_index in range(0, 6)[::-1]:
+			bit = (element >> bit_index) & 0x01
+			bits.append(bit)
 
-	# CRC ?
-	if add_crc:
-		crc = crc16(final_message)
-		#print "crc: %02x %02x" % (ord(crc[0:1]), ord(crc[1:2]))
-		final_message = ''.join((final_message, crc))
+	# Bit padding
+	if len(bits) % 8:
+		padding = [0, 1] * ((len(bits) % 8) / 2)
+		bits.extend(padding)
 
-	# Whitening ?
-	pkt = ''
-	if do_whitening:
-		pkt = ''.join((packed_preamble, packed_access_code,  whiten(final_message), '\x55'))
-	else:
-        	pkt = ''.join((packed_preamble, packed_access_code, final_message, '\x55'))
+	# Convert the bits to bytes
+	encoded_message = str(bits_to_bytes(bits))
 
-	# Padding ?
+	# Prepend the preamble and sync words/access code to the message
+	packet = ''.join((packed_preamble, packed_access_code, encoded_message))
+
+	# Padding (optional)
 	if pad_for_usrp:
-        	usrp_packing = packet_utils._npadding_bytes(len(pkt), samples_per_symbol, bits_per_symbol) * '\x55'
-        	pkt = pkt + usrp_packing
+		usrp_packing = packet_utils._npadding_bytes(len(packet), samples_per_symbol, bits_per_symbol) * '\x00'
+		packet = packet + usrp_packing
 
-	return pkt
+	return packet
