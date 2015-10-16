@@ -7,11 +7,7 @@
         <make>mwt1.mwt1_packet_mod_base(mwt1.mwt1_packet_encoder(
                 samples_per_symbol=$samples_per_symbol,
                 bits_per_symbol=$bits_per_symbol,
-                preamble=$preamble,
-                access_code=$access_code,
-                pad_for_usrp=$pad_for_usrp,
-		do_whitening=$do_whitening,
-		add_crc=$add_crc
+                pad_for_usrp=$pad_for_usrp
         ),
 	source_queue=$source_queue
 	)</make>
@@ -33,48 +29,8 @@
                 <type>int</type>
         </param>
         <param>
-                <name>Preamble</name>
-                <key>preamble</key>
-                <value></value>
-                <type>string</type>
-        </param>
-        <param>
-                <name>Access Code</name>
-                <key>access_code</key>
-                <value></value>
-                <type>string</type>
-        </param>
-        <param>
                 <name>Pad for USRP</name>
                 <key>pad_for_usrp</key>
-                <type>enum</type>
-                <option>
-                        <name>Yes</name>
-                        <key>True</key>
-                </option>
-                <option>
-                        <name>No</name>
-                        <key>False</key>
-                </option>
-        </param>
-
-        <param>
-                <name>Whitening</name>
-                <key>do_whitening</key>
-                <type>enum</type>
-                <option>
-                        <name>Yes</name>
-                        <key>True</key>
-                </option>
-                <option>
-                        <name>No</name>
-                        <key>False</key>
-                </option>
-        </param>
-
-        <param>
-                <name>Add CRC</name>
-                <key>add_crc</key>
                 <type>enum</type>
                 <option>
                         <name>Yes</name>
