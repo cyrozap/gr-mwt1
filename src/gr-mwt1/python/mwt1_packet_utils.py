@@ -19,6 +19,7 @@
 #
 
 
+import math
 import struct
 from gnuradio import gru
 from gnuradio.digital import packet_utils
