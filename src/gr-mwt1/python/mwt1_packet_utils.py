@@ -27,7 +27,7 @@ from gnuradio.digital import packet_utils
 
 ACCESS_CODE = '\xFF\x00' * 2
 PREAMBLE    = '\xAA' * 16
-PADDING     = '\x00' * 4
+PADDING     = '\x00' * 10
 
 ENCODER_TABLE = {
 	0x0: 0x15,
