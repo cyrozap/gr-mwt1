@@ -24,8 +24,9 @@ from gnuradio import gru
 from gnuradio.digital import packet_utils
 
 
-ACCESS_CODE = packet_utils.conv_packed_binary_string_to_1_0_string('\xFF\x00' * 2)
-PREAMBLE	= packet_utils.conv_packed_binary_string_to_1_0_string('\xAA' * 16)
+ACCESS_CODE = '\xFF\x00' * 2
+PREAMBLE    = '\xAA' * 16
+PADDING     = '\x00' * 4
 
 ENCODER_TABLE = {
 	0x0: 0x15,
@@ -110,9 +111,6 @@ def make_packet(payload, samples_per_symbol, bits_per_symbol, pad_for_usrp=True)
 	the encoded payload and an 8-bit CRC.
 	"""
 
-	(packed_access_code, padded) = packet_utils.conv_1_0_string_to_packed_binary_string(ACCESS_CODE)
-	(packed_preamble, ignore) = packet_utils.conv_1_0_string_to_packed_binary_string(PREAMBLE)
-
 	# CRC
 	crc = crc8(payload)
 	raw_message = ''.join((payload, crc))
@@ -140,7 +138,7 @@ def make_packet(payload, samples_per_symbol, bits_per_symbol, pad_for_usrp=True)
 	encoded_message = str(bits_to_bytes(bits))
 
 	# Prepend the preamble and sync words/access code to the message
-	packet = ''.join((packed_preamble, packed_access_code, encoded_message))
+	packet = ''.join((PREAMBLE, ACCESS_CODE, encoded_message, PADDING)) * 5
 
 	# Padding (optional)
 	if pad_for_usrp:
