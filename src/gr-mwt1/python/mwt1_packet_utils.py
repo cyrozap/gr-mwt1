@@ -90,7 +90,7 @@ def crc8(data):
 	result = 0
 	for i in range(0, len(data)):
 		result = CRC8_TABLE[(result ^ ord(data[i]))]
-	return result
+	return str(bytearray([result]))
 
 def bits_to_bytes(bits):
 	encoded_bytes = bytearray(int(math.ceil(len(bits)/8.0)))
@@ -120,7 +120,7 @@ def make_packet(payload, samples_per_symbol, bits_per_symbol, pad_for_usrp=True)
 	encoded_nibbles = []
 	for element in raw_message:
 		for shift in [4, 0]:
-			encoded_nibble = ENCODER_TABLE[(element >> shift) & 0xf]
+			encoded_nibble = ENCODER_TABLE[(ord(element) >> shift) & 0xf]
 			encoded_nibbles.append(encoded_nibble)
 
 	# Nibble to bit conversion
