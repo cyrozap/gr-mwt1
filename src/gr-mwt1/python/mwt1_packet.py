@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #
+# Copyright 2015 Forest Crossman
 # Copyright 2014 funoverip.net.
 #
 # This is free software; you can redistribute it and/or modify
