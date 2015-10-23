@@ -95,7 +95,7 @@ class mwt1_packet_encoder(gr.hier_block2):
 			self._bits_per_symbol,
 			self._pad_for_usrp,
 		)
-		msg = gr.message_from_string(packet)
+		msg = gr.message_from_string(packet * 100)
 		self._msgq_out.insert_tail(msg)
 
 

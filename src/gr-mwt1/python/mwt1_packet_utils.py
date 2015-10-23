@@ -139,7 +139,7 @@ def make_packet(payload, samples_per_symbol, bits_per_symbol, pad_for_usrp=True)
 	encoded_message = str(bits_to_bytes(bits))
 
 	# Prepend the preamble and sync words/access code to the message
-	packet = ''.join((PREAMBLE, ACCESS_CODE, encoded_message, PADDING)) * 5
+	packet = ''.join((PREAMBLE, ACCESS_CODE, encoded_message, PADDING))
 
 	# Padding (optional)
 	if pad_for_usrp:
