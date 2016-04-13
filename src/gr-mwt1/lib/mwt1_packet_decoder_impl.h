@@ -41,11 +41,11 @@ private:
 
   bool is_msg;
   unsigned char buffer[BUF_MAX_SIZE]; // store message
-  int buffer_expected_len; // message length according to message header, in
-                           // bits
-  int bit_index; // bit index, within a byte. byte_index would have been better
-                 // ?
-  int buffer_i;  // index of buffer[]
+  int buffer_expected_len;     // message length according to message header, in
+                               // bits
+  int bit_index;               // The bit index of the 6-bit encoded nibble
+  unsigned char nibble_buffer; // The buffer to hold an encoded nibble
+  int buffer_i;                // index of buffer[]
 
   struct timeval time_init;
   struct timeval time_sync_found;

@@ -48,7 +48,8 @@ mwt1_packet_decoder_impl::mwt1_packet_decoder_impl(
       target_queue(arg_target_queue), do_crc8_check(arg_do_crc8_check),
       verbose(arg_verbose), drop_crc(arg_drop_crc),
 
-      is_msg(false), buffer_expected_len(0), bit_index(0), buffer_i(0) {
+      is_msg(false), buffer_expected_len(0), bit_index(0), nibble_buffer(0),
+      buffer_i(0) {
   // reset buffer
   buffer_reset();
 }
@@ -71,6 +72,7 @@ int mwt1_packet_decoder_impl::general_work(
   const unsigned char *in = (const unsigned char *)input_items[0];
   unsigned char *out = (unsigned char *)output_items[0];
   unsigned int produced = 0;
+  int result;
 
   // Do <+signal processing+>
   for (int i = 0; i < noutput_items; i++) {
@@ -78,14 +80,15 @@ int mwt1_packet_decoder_impl::general_work(
     // we are currently processing a message
     if (is_msg) {
       // add new bit
-      buffer_append(in[i]);
+      result = buffer_append(in[i]);
       // end of message ?
-      if ((buffer_i != 0 && bit_index == 8 &&
-           buffer_i == buffer_expected_len - 1) ||
-          buffer_i == (BUF_MAX_SIZE)-1) {
+      if (result == 0 || buffer_i == (BUF_MAX_SIZE)-1) {
         is_msg = false; // stop
-        buffer_flush(out);
-        produced = buffer_i + 1;
+        if (buffer_flush(out) == 1) {
+          produced = buffer_i;
+        } else {
+          produced = 0;
+        }
       }
     } else {
       // did we find the beginning of a new message ?
@@ -114,62 +117,53 @@ BUFFER FLUSH
 // print/send out current buffer
 int mwt1_packet_decoder_impl::buffer_flush(unsigned char *out) {
 
-  uint8_t checksum;
+  uint8_t checksum = 0;
   uint8_t checksum_found;
 
-  if (verbose) {
-    fprintf(stdout, "[verbose] Pkt: ");
-    for (int j = 0; j < buffer_i + 1; j++) {
-      fprintf(stdout, "%02x ", (unsigned char)buffer[j]);
+  if (buffer_i >= 0) {
+    if (verbose) {
+      fprintf(stdout, "[verbose] Pkt: ");
+      for (int j = 0; j < buffer_i + 1; j++) {
+        fprintf(stdout, "%02x ", (unsigned char)buffer[j]);
+      }
     }
-  }
 
-  // CHECKSUM ?
-  if (do_crc8_check) {
+    // CHECKSUM ?
+    if (do_crc8_check) {
+      // get CRC from frame (last byte)
+      checksum_found = buffer[buffer_i];
 
-    // get CRC from frame (last byte)
-    checksum_found = buffer[buffer_i];
-    // compute real CRC
-    for (int i = 0; i < (buffer_i + 1) - 2; i++)
-      checksum = culCalcCRC((unsigned char)buffer[i], checksum);
-    // drop frame if wrong CRC
-    if (checksum != checksum_found) {
-      if (verbose) {
-        fprintf(stdout, "[crc error]\n");
+      // compute real CRC
+      for (int i = 0; i < buffer_i; i++) {
+        checksum = culCalcCRC((unsigned char)buffer[i], checksum);
       }
 
-      buffer_i = -1; // on return, we do 'produced = buffer_i+1;'
-      return 0;
-    } else {
-      // if CRC is correct, remove it from frame
-      buffer_i -= 1;
+      // drop frame if wrong CRC
+      if (checksum != checksum_found) {
+        if (verbose) {
+          fprintf(stdout, "[crc error]\n");
+        }
+
+        return 0;
+      }
     }
-  }
 
-  if (verbose) {
-    fprintf(stdout, "\n");
-  }
+    if (verbose) {
+      fprintf(stdout, "\n");
+    }
 
-  // Drop preamble and sync word
-  if (true) {
     // copy buffer to out port
-    memcpy(out, buffer + 1, buffer_i);
-    // .. and send a message to the queue (remove header (1byte))
-    message::sptr msg = message::make(0, 0, 0, buffer_i);
-    memcpy(msg->msg(), buffer + 1, buffer_i); // copy
-    target_queue->insert_tail(msg);           // send it
-    msg.reset();                              // free it up
-  } else {
-    // copy buffer to out port
-    memcpy(out, buffer, buffer_i + 1);
+    memcpy(out, buffer, buffer_i);
     // .. and send a message to the queue
-    message::sptr msg = message::make(0, 0, 0, buffer_i + 1);
+    message::sptr msg = message::make(0, 0, 0, buffer_i);
     memcpy(msg->msg(), buffer, buffer_i + 1); // copy
     target_queue->insert_tail(msg);           // send it
     msg.reset();                              // free it up
-  }
 
-  return 1;
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 /****************************************************************
@@ -178,31 +172,45 @@ BUFFER APPEND
 // we receive a byte and add the first bit to the end of the buffer
 int mwt1_packet_decoder_impl::buffer_append(unsigned char byte) {
 
-  // need a new byte in buffer[] ?
-  if (bit_index == 8) {
-    bit_index = 0;
-    buffer_i++;
-  }
+  uint8_t decoded_nibble;
 
-  // is the first byte complete ? If yes, it contains the length of the message
-  // header len and CRC must be added
-  if (buffer_i == 1 && bit_index == 0) {
-    // payload len
-    buffer_expected_len = (int)(buffer[0]);
-    // add crc len ?
-    if (do_crc8_check) {
-      buffer_expected_len += 1; // CRC8 is of course 1 byte length
+  if (bit_index == 12) {
+    // Reset the nibble bit index
+    bit_index = 0;
+
+    decoded_nibble = decode_4b6b(nibble_buffer);
+
+    // Return if the decoded nibble is invalid (end of message)
+    if (decoded_nibble == 0xff) {
+      buffer_i--;
+      return 0;
     }
-    // add header len
-    buffer_expected_len += 1; // header is 1 byte (len)
+
+    buffer[buffer_i] |= decoded_nibble;
+
+    // Increment the buffer index
+    buffer_i++;
   }
 
   // add new bit to the end of the buffer
   if (bit_index == 0) {
-    buffer[buffer_i] = (byte & 0x1);
+    nibble_buffer = (byte & 0x1);
+  } else if (bit_index == 6) {
+    decoded_nibble = decode_4b6b(nibble_buffer);
+
+    // Return if the decoded nibble is invalid (end of message)
+    if (decoded_nibble == 0xff) {
+      buffer_i--;
+      return 0;
+    }
+
+    buffer[buffer_i] = decoded_nibble << 4;
+
+    nibble_buffer = (byte & 0x1);
   } else {
-    buffer[buffer_i] = (buffer[buffer_i] << 1) | (byte & 0x1);
+    nibble_buffer = (nibble_buffer << 1) | (byte & 0x1);
   }
+
   // inc bit index
   bit_index++;
 
