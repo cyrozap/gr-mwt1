@@ -18,39 +18,37 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef INCLUDED_MWT1_MWT1_PACKET_DECODER_H
 #define INCLUDED_MWT1_MWT1_PACKET_DECODER_H
 
-#include <mwt1/api.h>
 #include <gnuradio/block.h>
 #include <gnuradio/msg_queue.h>
+#include <mwt1/api.h>
 
 namespace gr {
-  namespace mwt1 {
+namespace mwt1 {
 
-    /*!
-     * \brief <+description of block+>
-     * \ingroup mwt1
-     *
-     */
-    class MWT1_API mwt1_packet_decoder : virtual public gr::block
-    {
-     public:
-      typedef boost::shared_ptr<mwt1_packet_decoder> sptr;
+/*!
+ * \brief <+description of block+>
+ * \ingroup mwt1
+ *
+ */
+class MWT1_API mwt1_packet_decoder : virtual public gr::block {
+public:
+  typedef boost::shared_ptr<mwt1_packet_decoder> sptr;
 
-      /*!
-       * \brief Return a shared_ptr to a new instance of mwt1::mwt1_packet_decoder.
-       *
-       * To avoid accidental use of raw pointers, mwt1::mwt1_packet_decoder's
-       * constructor is in a private implementation
-       * class. mwt1::mwt1_packet_decoder::make is the public interface for
-       * creating new instances.
-       */
-      static sptr make(msg_queue::sptr target_queue, bool, bool, bool);
-    };
+  /*!
+   * \brief Return a shared_ptr to a new instance of mwt1::mwt1_packet_decoder.
+   *
+   * To avoid accidental use of raw pointers, mwt1::mwt1_packet_decoder's
+   * constructor is in a private implementation
+   * class. mwt1::mwt1_packet_decoder::make is the public interface for
+   * creating new instances.
+   */
+  static sptr make(msg_queue::sptr target_queue, bool, bool, bool);
+};
 
-  } // namespace mwt1
+} // namespace mwt1
 } // namespace gr
 
 #endif /* INCLUDED_MWT1_MWT1_PACKET_DECODER_H */

@@ -27,9 +27,7 @@
 
 #include "qa_mwt1.h"
 
-CppUnit::TestSuite *
-qa_mwt1::suite()
-{
+CppUnit::TestSuite *qa_mwt1::suite() {
   CppUnit::TestSuite *s = new CppUnit::TestSuite("mwt1");
 
   return s;

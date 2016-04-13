@@ -23,14 +23,13 @@
 #ifndef _QA_MWT1_H_
 #define _QA_MWT1_H_
 
-#include <gnuradio/attributes.h>
 #include <cppunit/TestSuite.h>
+#include <gnuradio/attributes.h>
 
 //! collect all the tests for the gr-filter directory
 
-class __GR_ATTR_EXPORT qa_mwt1
-{
- public:
+class __GR_ATTR_EXPORT qa_mwt1 {
+public:
   //! return suite of tests for all of gr-filter directory
   static CppUnit::TestSuite *suite();
 };
