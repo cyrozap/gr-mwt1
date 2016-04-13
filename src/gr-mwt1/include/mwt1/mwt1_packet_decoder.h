@@ -47,7 +47,7 @@ namespace gr {
        * class. mwt1::mwt1_packet_decoder::make is the public interface for
        * creating new instances.
        */
-      static sptr make(msg_queue::sptr target_queue, bool, bool, bool, bool);
+      static sptr make(msg_queue::sptr target_queue, bool, bool, bool);
     };
 
   } // namespace mwt1

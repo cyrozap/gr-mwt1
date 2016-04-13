@@ -26,12 +26,6 @@
 #include <cstdio>
 
 #define BUF_MAX_SIZE		2048    // bytes
-#define PN9_TABLE_SIZE		511
-
-#define CRC16_POLY 		0x8005	// CRC16
-#define CRC_INIT 		0xFFFF
-
-
 
 namespace gr {
   namespace mwt1 {
@@ -40,10 +34,10 @@ namespace gr {
     {
      private:
 	msg_queue::sptr target_queue;	   	// block arg.  where to send the packet when received
-	bool do_unwhitening;			// block arg
-	bool do_crc16_check;			// block arg
+	bool do_crc8_check;			// block arg
 	bool verbose;				// block arg
-	bool drop_header;			// block arg
+  bool drop_header;			// block arg
+  bool drop_crc;			// block arg
 
         bool is_msg;
         unsigned char buffer[BUF_MAX_SIZE];	// store message
@@ -54,11 +48,8 @@ namespace gr {
         struct timeval time_init;
         struct timeval time_sync_found;
 
-	// 99.9% inspired from https://github.com/matthijskooijman/arduino-max/blob/master/Pn9.cpp
-	unsigned char pn9_table[PN9_TABLE_SIZE];
-
      public:
-      mwt1_packet_decoder_impl(msg_queue::sptr target_queue, bool do_unwhitening, bool do_crc16_check, bool verbose, bool drop_header);
+      mwt1_packet_decoder_impl(msg_queue::sptr target_queue, bool do_crc8_check, bool verbose, bool drop_crc);
       ~mwt1_packet_decoder_impl();
 
       // Where all the action really happens
@@ -74,12 +65,11 @@ namespace gr {
       int buffer_append(unsigned char byte);
       int buffer_reset();
 
-      // crc16
-      uint16_t culCalcCRC(unsigned char crcData, uint16_t crcReg);
+      // crc8
+      uint8_t culCalcCRC(unsigned char crcData, uint8_t crcReg);
 
-      // Un-Whitening
-      int pn9_xor(unsigned char *buf, int len);
-      int pn9_init_table();
+      // 4b6b decoding
+      uint8_t decode_4b6b(unsigned char byte);
 
     };
 

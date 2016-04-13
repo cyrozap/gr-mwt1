@@ -4,16 +4,17 @@
   	<key>mwt1_mwt1_packet_decoder</key>
 	<category>MWT1</category>
 	<import>import mwt1</import>
-	<make>mwt1.mwt1_packet_decoder($target_queue,$do_unwhitening, $do_crc16_check, $verbose, $drop_header)</make>
+	<make>mwt1.mwt1_packet_decoder($target_queue, $do_crc8_check, $verbose, $drop_crc)</make>
 
         <param>
                 <name>Target Message Queue</name>
                 <key>target_queue</key>
                 <type>raw</type>
         </param>
+
         <param>
-                <name>Whitening</name>
-                <key>do_unwhitening</key>
+                <name>Check CRC8</name>
+                <key>do_crc8_check</key>
                 <type>enum</type>
                 <option>
                         <name>Yes</name>
@@ -25,23 +26,9 @@
                 </option>
         </param>
 
-        <param>
-                <name>Check CRC16</name>
-                <key>do_crc16_check</key>
-                <type>enum</type>
-                <option>
-                        <name>Yes</name>
-                        <key>True</key>
-                </option>
-                <option>
-                        <name>No</name>
-                        <key>False</key>
-                </option>
-        </param>
-
-        <param>
-                <name>Remove Header</name>
-                <key>drop_header</key>
+		  <param>
+                <name>Remove CRC</name>
+                <key>drop_crc</key>
                 <type>enum</type>
                 <option>
                         <name>Yes</name>
